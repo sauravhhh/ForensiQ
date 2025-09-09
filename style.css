@@ -1,3 +1,4 @@
+/* CSS Variables */
 :root {
     --primary-dark: #0a1929;
     --secondary-dark: #1a2332;
@@ -6,8 +7,10 @@
     --accent-red: #ff0044;
     --text-light: #e0e0e0;
     --text-muted: #a0a0a0;
+    --purple: #9c27b0;
 }
 
+/* Base Styles */
 * {
     margin: 0;
     padding: 0;
@@ -22,6 +25,7 @@ body {
     overflow-x: hidden;
 }
 
+/* Header Styles */
 .header {
     background: rgba(26, 35, 50, 0.9);
     backdrop-filter: blur(10px);
@@ -52,6 +56,7 @@ body {
     100% { transform: scale(1); }
 }
 
+/* Navigation Tabs */
 .nav-tabs {
     border: none;
     margin-top: 1rem;
@@ -80,11 +85,13 @@ body {
     box-shadow: 0 4px 15px rgba(0, 212, 255, 0.3);
 }
 
+/* Main Content */
 .tab-content {
     padding: 2rem 0;
     min-height: calc(100vh - 200px);
 }
 
+/* Analysis Cards */
 .analysis-card {
     background: rgba(255, 255, 255, 0.05);
     border-radius: 20px;
@@ -100,6 +107,7 @@ body {
     transform: translateY(-5px);
 }
 
+/* Scanner Area */
 .scanner-area {
     background: rgba(0, 0, 0, 0.3);
     border: 2px dashed var(--accent-blue);
@@ -127,6 +135,7 @@ body {
     100% { top: 100%; }
 }
 
+/* Icons */
 .fingerprint-icon {
     font-size: 5rem;
     color: var(--accent-blue);
@@ -141,10 +150,11 @@ body {
 
 .iris-icon {
     font-size: 5rem;
-    color: #9c27b0;
+    color: var(--purple);
     margin-bottom: 1rem;
 }
 
+/* Buttons */
 .btn-forensic {
     background: linear-gradient(135deg, var(--accent-blue), #0099cc);
     border: none;
@@ -162,6 +172,7 @@ body {
     color: white;
 }
 
+/* Result Display */
 .result-display {
     background: rgba(0, 0, 0, 0.4);
     border-radius: 15px;
@@ -181,6 +192,7 @@ body {
     to { opacity: 1; transform: translateY(0); }
 }
 
+/* Match Indicators */
 .match-indicator {
     display: inline-block;
     width: 12px;
@@ -193,6 +205,7 @@ body {
 .match-medium { background: #ffaa00; }
 .match-low { background: var(--accent-red); }
 
+/* Statistics Grid */
 .stats-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
@@ -220,6 +233,7 @@ body {
     margin-top: 0.25rem;
 }
 
+/* Footer */
 .footer {
     text-align: center;
     padding: 2rem 0;
@@ -240,6 +254,37 @@ body {
     100% { transform: scale(1); }
 }
 
+/* Loading Spinner */
+.loading-spinner {
+    display: none;
+    width: 40px;
+    height: 40px;
+    border: 3px solid rgba(0, 212, 255, 0.3);
+    border-top-color: var(--accent-blue);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 1rem auto;
+}
+
+.loading-spinner.show {
+    display: block;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Result Styling */
+.result-positive {
+    border-color: rgba(0, 255, 136, 0.3);
+}
+
+.result-negative {
+    border-color: rgba(255, 0, 68, 0.3);
+}
+
+/* Mobile Responsive */
 @media (max-width: 768px) {
     .logo {
         font-size: 1.2rem;
@@ -267,30 +312,57 @@ body {
     }
 }
 
-.loading-spinner {
-    display: none;
-    width: 40px;
-    height: 40px;
-    border: 3px solid rgba(0, 212, 255, 0.3);
-    border-top-color: var(--accent-blue);
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-    margin: 1rem auto;
+/* Extra Styles for Enhanced UI */
+.highlight-text {
+    color: var(--accent-blue);
+    font-weight: 600;
 }
 
-.loading-spinner.show {
-    display: block;
+.success-border {
+    border: 2px solid var(--accent-green);
+    box-shadow: 0 0 20px rgba(0, 255, 136, 0.2);
 }
 
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+.card-header-custom {
+    background: linear-gradient(90deg, rgba(0, 212, 255, 0.1), rgba(0, 255, 136, 0.1));
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 1rem;
+    margin: -1.5rem -1.5rem 1.5rem -1.5rem;
+    border-radius: 15px 15px 0 0;
 }
 
-.result-positive {
-    border-color: rgba(0, 255, 136, 0.3);
+.data-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-.result-negative {
-    border-color: rgba(255, 0, 68, 0.3);
-  }
+.data-row:last-child {
+    border-bottom: none;
+}
+
+.data-label {
+    font-weight: 600;
+    color: var(--text-muted);
+}
+
+.data-value {
+    color: var(--text-light);
+}
+
+.confidence-bar {
+    width: 100%;
+    height: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    margin-top: 0.5rem;
+    overflow: hidden;
+}
+
+.confidence-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent-green), #00ffaa);
+    border-radius: 4px;
+    transition: width 1s ease;
+    }
