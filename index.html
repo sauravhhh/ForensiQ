@@ -161,6 +161,23 @@
       .cand .row .pc{font-family:"IBM Plex Mono",monospace;font-size:.84rem;min-width:3.6em;text-align:right}
       .toast{position:fixed;left:50%;bottom:1.1rem;transform:translateX(-50%) translateY(20px);background:var(--ink);color:var(--bg);padding:.6rem 1rem;border-radius:7px;font-size:.85rem;font-weight:500;opacity:0;pointer-events:none;transition:.25s;z-index:60;max-width:92vw;text-align:center}
       .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+      /* network module */
+      .carrier-list{display:grid;gap:.5rem;margin-top:.7rem}
+      .carrier-row{display:flex;align-items:center;gap:.7rem;border:1px solid var(--line2);border-radius:6px;padding:.55rem .65rem;background:var(--panel2)}
+      .carrier-row.primary{border-color:var(--accent);background:var(--accent-soft)}
+      .carrier-dot{width:34px;height:34px;flex:none;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:.72rem;color:#fff;font-family:"IBM Plex Mono",monospace}
+      .carrier-dot.jio{background:#0a2885}.carrier-dot.airtel{background:#e40000}.carrier-dot.vi{background:#ffb900;color:#3a2a00}
+      .carrier-row .cname{font-weight:700;font-size:.9rem;line-height:1.2}
+      .carrier-row .csub{font-size:.74rem;color:var(--muted)}
+      .carrier-tag{margin-left:auto;font-size:.62rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:.18rem .45rem;border-radius:99px;background:var(--chip);color:var(--muted);white-space:nowrap}
+      .carrier-tag.primary{background:var(--accent);color:var(--accent-ink)}
+      .carrier-tag.detected{background:var(--good-soft);color:var(--good)}
+      .lookup-row{display:flex;flex-wrap:wrap;gap:.55rem;align-items:flex-end}
+      .lookup-row .fl{flex:1;min-width:200px}
+      .lookup-row input{width:100%;letter-spacing:.04em}
+      .field-note{font-size:.78rem;color:var(--muted);margin:.5rem 0 0;line-height:1.55}
+      .field-error{font-size:.82rem;color:var(--red);margin:.55rem 0 0;font-weight:600}
+      .big-ip{font-family:"IBM Plex Mono",monospace;font-size:1.35rem;font-weight:600;line-height:1.15;word-break:break-all}
 
       @media (max-width:1180px){
         .shell{grid-template-columns:200px minmax(0,1fr)}
@@ -168,16 +185,84 @@
         .aside h3{grid-column:1/-1}
       }
       @media (max-width:760px){
+        html,body{overflow-x:clip;max-width:100%}
+        button,.btn,select,input:not([type="range"]){min-height:44px}
+        button{touch-action:manipulation}
+        select,input[type="text"]{font-size:16px}
+        /* top bar scrolls away instead of eating phone screen height */
+        .topbar{position:static}
+        .topbar-in{padding:.55rem .8rem;gap:.4rem .8rem}
+        .topmeta{margin-left:0;flex-basis:100%;font-size:.78rem;gap:.3rem .85rem}
         .shell{grid-template-columns:1fr}
         .rail{position:static;border-right:0;border-bottom:1px solid var(--line);padding:.8rem .8rem 1rem}
-        .rail nav{display:grid;grid-template-columns:1fr 1fr;gap:.3rem}
+        .rail nav{display:grid;grid-template-columns:1fr 1fr;gap:.4rem}
         .rail .note{display:none}
-        main{padding:1rem .8rem 2rem}
-        .aside{grid-template-columns:1fr}
+        .navbtn{min-height:44px;padding:.55rem .55rem;font-size:.84rem;gap:.4rem;margin-bottom:0;min-width:0}
+        .navbtn .st{font-size:.58rem;padding:.08rem .3rem}
+        main{padding:1rem .75rem 2rem;min-width:0}
+        .aside{grid-template-columns:1fr;padding:1rem .75rem 2rem}
+        .card{padding:.85rem;min-width:0}
         .grid2,.grid-view{grid-template-columns:1fr}
+        .grid-view .card canvas{margin:0 auto}
+        /* headings & tags wrap instead of overflowing */
+        .p-head h2{font-size:1.15rem;line-height:1.3;overflow-wrap:anywhere}
+        .p-head .sub{font-size:.86rem}
+        .evtag{white-space:normal;max-width:100%;line-height:1.55;overflow-wrap:anywhere}
+        /* stats: two-up, values wrap inside their tile */
+        .stat-row{grid-template-columns:1fr 1fr;gap:.7rem}
+        .stat{padding:.7rem .8rem;min-width:0}
+        .stat .n{font-size:1.12rem;overflow-wrap:anywhere}
+        /* controls stack full-width; segmented groups share the row evenly */
+        .controls{flex-direction:column;align-items:stretch;gap:.6rem}
+        .controls .btn{width:100%;padding:.6rem .85rem}
+        .controls label.fl{width:100%}
+        .controls label.fl select{width:100%}
+        .seg{display:flex;width:100%;flex-wrap:wrap}
+        .seg button{flex:1 1 0;min-height:44px;padding:.55rem .3rem;font-size:.8rem;white-space:normal;line-height:1.3;border-right:1px solid var(--line2)}
+        .seg button:last-child{border-right:0}
+        /* sliders get a full row and a tall touch track */
+        .rng-row{flex-wrap:wrap;width:100%;row-gap:.1rem}
+        .rng-row input[type="range"]{flex:1 1 150px;width:auto;min-width:0;min-height:44px}
+        /* key–value readouts stack: label above, value left-aligned and wrappable */
+        .kv{grid-template-columns:1fr;gap:.05rem}
+        .kv dt{margin-top:.5rem}
+        .kv dt:first-child{margin-top:0}
+        .kv dd{text-align:left;overflow-wrap:anywhere}
+        /* tables reflow into stacked labelled rows — no sideways scrolling */
+        .tblwrap{overflow:visible;border:0;border-radius:0}
+        .tblwrap table,.tblwrap tbody,.tblwrap tr,.tblwrap td{display:block;width:100%}
+        .tblwrap thead{display:none}
+        .tblwrap tr{border:1px solid var(--line2);border-radius:6px;background:var(--panel2);padding:.3rem .65rem;margin-bottom:.55rem}
+        .tblwrap td{border-bottom:1px dashed var(--line2);padding:.45rem 0;display:flex;justify-content:space-between;align-items:baseline;gap:1rem;text-align:right;overflow-wrap:anywhere}
+        .tblwrap td:last-child{border-bottom:0}
+        .tblwrap td::before{content:attr(data-label);font-family:"IBM Plex Sans",sans-serif;font-size:.66rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600;text-align:left;flex:none;max-width:48%}
+        .tblwrap td.num{text-align:right}
+        /* misc components */
+        .well-row{grid-template-columns:repeat(3,minmax(0,1fr));gap:.45rem}
+        .well canvas{width:100%;max-width:104px}
+        .cand .row{flex-wrap:wrap}
+        .cand .row .who{flex:1 1 55%;min-width:0;overflow-wrap:anywhere}
+        .cand .row .meter{flex:1 1 100%;order:3}
+        .cand .row .pc{order:2}
+        .sum-item .r1{flex-direction:column;align-items:flex-start;gap:.15rem}
+        .sum-item .sc{overflow-wrap:anywhere}
+        .log{overflow-x:hidden;overflow-wrap:anywhere;font-size:.74rem}
+        .stage-line,.canvas-cap{overflow-wrap:anywhere}
+        .verdict{white-space:normal;line-height:1.45}
+        .carrier-row{flex-wrap:wrap;min-width:0}
+        .carrier-row>span:nth-child(2){flex:1 1 8rem;min-width:0;overflow-wrap:anywhere}
+        .lookup-row{flex-direction:column;align-items:stretch}
+        .lookup-row .fl{min-width:0}
+        .lookup-row .btn{min-height:48px}
+        .big-ip{font-size:1.12rem}
+        .toast{bottom:.8rem}
+      }
+      @media (max-width:560px){
+        /* status pills give their width to the module names on narrow phones */
+        .navbtn .st{display:none}
+        .navbtn{font-size:.82rem}
         .stat-row{grid-template-columns:1fr 1fr}
-        .topmeta{margin-left:0}
-        input[type="range"]{width:130px}
+        .big-score{font-size:1.6rem}
       }
       @media (prefers-reduced-motion: reduce){
         *{transition:none!important;animation:none!important}
@@ -211,6 +296,7 @@
           <button class="navbtn" data-mod="voice"><span class="ic" data-ic="wave"></span>Voiceprint<span class="st" data-st="voice">QUEUED</span></button>
           <button class="navbtn" data-mod="face"><span class="ic" data-ic="face"></span>Face matching<span class="st" data-st="face">QUEUED</span></button>
           <button class="navbtn" data-mod="foot"><span class="ic" data-ic="foot"></span>Footprint<span class="st" data-st="foot">QUEUED</span></button>
+          <button class="navbtn" data-mod="network"><span class="ic" data-ic="net"></span>IP &amp; carrier lookup<span class="st">LIVE</span></button>
         </nav>
         <p class="note">Seven exhibits were recovered from a warehouse break-in and logged under chain of custody. Run each module, then compile the case report from the overview.</p>
       </div>
@@ -607,6 +693,96 @@
             </div>
           </div>
         </section>
+
+        <!-- ============ NETWORK / IP & CARRIER ============ -->
+        <section class="panel" id="panel-network">
+          <div class="p-head">
+            <div>
+              <h2>IP &amp; carrier lookup</h2>
+              <div class="sub">Live network identification for the person using this service right now — detected from their connection, not typed in. Location, ISP and ASN are returned by the ipwho.is lookup for the visitor's real public IP. Most sessions on this lab originate from Guwahati, Assam.</div>
+            </div>
+            <span class="evtag">LIVE LOOKUP <b>· IPWHO.IS</b> · NO KEY</span>
+          </div>
+          <div class="stack">
+            <div class="grid2">
+              <div class="card">
+                <h4>Your connection — auto-detected</h4>
+                <div class="big-ip" id="netIp">Detecting…</div>
+                <p class="field-note" id="netIpType" style="margin-top:.25rem">Public IP address of the current visitor</p>
+                <div class="controls" style="margin-top:.85rem">
+                  <button class="btn primary" id="netDetectBtn">Detect my IP</button>
+                  <button class="btn" id="netCopyBtn">Copy IP details</button>
+                </div>
+                <div class="progress"><i id="netProg"></i></div>
+                <div class="stage-line" id="netStage">Querying ipwho.is for this connection…</div>
+                <dl class="kv" style="margin-top:.85rem">
+                  <dt>City</dt><dd id="netCity">—</dd>
+                  <dt>Region / State</dt><dd id="netRegion">—</dd>
+                  <dt>Country</dt><dd id="netCountry">—</dd>
+                  <dt>Location</dt><dd id="netLocation">—</dd>
+                  <dt>ISP</dt><dd id="netISP">—</dd>
+                  <dt>Organisation</dt><dd id="netOrg">—</dd>
+                  <dt>ASN</dt><dd class="mono" id="netASN">—</dd>
+                  <dt>Coordinates</dt><dd class="mono" id="netCoords">—</dd>
+                  <dt>Timezone</dt><dd class="mono" id="netTz">—</dd>
+                </dl>
+                <p class="field-note">Location is as reported by the ISP for this IP — for mobile connections it is usually the carrier's regional gateway. Guwahati, Assam is the expected location for the regular user of this lab.</p>
+              </div>
+              <div class="stack">
+                <div class="card">
+                  <h4>Carrier — Jio · Airtel · Vi</h4>
+                  <dl class="kv">
+                    <dt>Detected carrier</dt><dd id="netCarrier">—</dd>
+                    <dt>Connection type</dt><dd id="netConnType">—</dd>
+                  </dl>
+                  <div class="carrier-list" id="carrierList">
+                    <div class="carrier-row primary" data-carrier="Jio">
+                      <span class="carrier-dot jio">Jio</span>
+                      <span><span class="cname">Reliance Jio</span><br><span class="csub">Jio Infocomm · 4G / 5G · listed first</span></span>
+                      <span class="carrier-tag primary">Primary</span>
+                    </div>
+                    <div class="carrier-row" data-carrier="Airtel">
+                      <span class="carrier-dot airtel">airtel</span>
+                      <span><span class="cname">Airtel</span><br><span class="csub">Bharti Airtel · 4G / 5G</span></span>
+                      <span class="carrier-tag">Carrier</span>
+                    </div>
+                    <div class="carrier-row" data-carrier="Vi">
+                      <span class="carrier-dot vi">Vi</span>
+                      <span><span class="cname">Vi</span><br><span class="csub">Vodafone Idea · 4G</span></span>
+                      <span class="carrier-tag">Carrier</span>
+                    </div>
+                  </div>
+                  <p class="field-note">Jio is shown first as the primary carrier for this lab. When the ISP name returned for your IP matches a carrier, that row is marked <b>Detected</b> as well.</p>
+                </div>
+                <div class="card">
+                  <h4>Phone number lookup — ISP by series</h4>
+                  <div class="lookup-row">
+                    <label class="fl">10-digit Indian mobile number
+                      <input type="text" id="phoneInput" class="mono" inputmode="numeric" autocomplete="tel" placeholder="e.g. 70020 12345" maxlength="13" />
+                    </label>
+                    <button class="btn primary" id="phoneLookupBtn">Look up ISP</button>
+                  </div>
+                  <p class="field-error" id="phoneError" hidden></p>
+                  <div id="phoneResult" hidden>
+                    <dl class="kv" style="margin-top:.85rem">
+                      <dt>Number</dt><dd class="mono" id="phNumber">—</dd>
+                      <dt>Series (first digits)</dt><dd class="mono" id="phSeries">—</dd>
+                      <dt>ISP / Carrier</dt><dd id="phCarrier">—</dd>
+                      <dt>Full operator name</dt><dd id="phOperator">—</dd>
+                      <dt>Telecom circle</dt><dd id="phCircle">—</dd>
+                    </dl>
+                    <div style="margin-top:.8rem" id="phVerdict"></div>
+                  </div>
+                  <p class="field-note">The carrier is read from the number series — the first digits originally allotted to an operator (for example, 7002x series in Assam). If the number has been ported (MNP), the current operator can differ from the original series allotment.</p>
+                </div>
+              </div>
+            </div>
+            <div class="card">
+              <h4>How to read this</h4>
+              <p style="margin:0;font-size:.9rem">The IP panel shows the person using the service — their own public IP, city, region, country, ISP and ASN — fetched live from <span class="mono">ipwho.is</span>, the same free, no-key IP API used on the OSInit site. The phone panel works offline from the entered number alone: type any 10-digit Indian mobile and its ISP is identified from the opening series, with Jio, Airtel and Vi as the carriers — Jio first.</p>
+            </div>
+          </div>
+        </section>
       </main>
 
       <!-- ============ ASIDE ============ -->
@@ -666,7 +842,8 @@
         drop:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3s6.5 7 6.5 11.5a6.5 6.5 0 1 1-13 0C5.5 10 12 3 12 3Z"/></svg>',
         wave:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 12h2l2-7 3 14 3-10 2 3h6"/></svg>',
         face:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M8.5 10h.01M15.5 10h.01"/><path d="M8.5 15.5c1 1.2 2.2 1.8 3.5 1.8s2.5-.6 3.5-1.8"/></svg>',
-        foot:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 3c2.8 0 4.5 2.6 4.5 5.6 0 2-.8 3.2-.8 5 0 1.9 1.6 2.6 1.6 4.4 0 1.7-1.3 3-3.3 3S7.5 19.6 7.5 17c0-2.3 1-3.4 1-5.6C8.5 8.6 6.5 7.4 6.5 5.4 6.5 3.9 7.6 3 9 3Z"/></svg>'
+        foot:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 3c2.8 0 4.5 2.6 4.5 5.6 0 2-.8 3.2-.8 5 0 1.9 1.6 2.6 1.6 4.4 0 1.7-1.3 3-3.3 3S7.5 19.6 7.5 17c0-2.3 1-3.4 1-5.6C8.5 8.6 6.5 7.4 6.5 5.4 6.5 3.9 7.6 3 9 3Z"/></svg>',
+        net:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.7 3.8 9S14.5 18.4 12 21c-2.5-2.6-3.8-5.7-3.8-9S9.5 5.6 12 3Z"/></svg>'
       };
       document.querySelectorAll("[data-ic]").forEach(function(el){ el.innerHTML = IC[el.getAttribute("data-ic")] || ""; });
 
@@ -697,6 +874,17 @@
 
       function setNavStatus(mod, cls, text){ var s=document.querySelector('[data-st="'+mod+'"]'); if(!s) return; s.className="st"+(cls?" "+cls:""); s.textContent=text; }
 
+      /* copy each table's header text onto its cells so the stacked
+         mobile layout can label every value (see .tblwrap CSS) */
+      function labelTables(){
+        document.querySelectorAll(".tblwrap table").forEach(function(tbl){
+          var heads=[]; tbl.querySelectorAll("thead th").forEach(function(th){ heads.push(th.textContent.trim()); });
+          tbl.querySelectorAll("tbody tr").forEach(function(tr){
+            tr.querySelectorAll("td").forEach(function(td,i){ if(heads[i]) td.setAttribute("data-label", heads[i]); });
+          });
+        });
+      }
+
       function refreshOverview(){
         var nDone = ORDER.filter(function(m){ return done[m]; }).length;
         var supp = ORDER.filter(function(m){ return done[m] && META[m].verdictClass!=="excl"; }).length;
@@ -726,6 +914,7 @@
           if(done[m]){ d.innerHTML = '<div class="r1"><b>'+x.name+'</b><span class="sc">'+x.detail+'</span></div><div class="meter"><i style="width:'+x.score+'%"></i></div>'; }
           else { d.innerHTML = '<div class="r1"><b>'+x.name+'</b><span class="none">Awaiting examination</span></div>'; }
           fl.appendChild(d); });
+        labelTables();
       }
 
       /* ---------- generic run machinery ---------- */
@@ -1299,6 +1488,127 @@
         });
       });
 
+      /* ================= NETWORK — IP & CARRIER ================= */
+      var netData = null;
+      function carrierFromISP(text){
+        var s = (" "+(text||"")+" ").toLowerCase();
+        if(s.indexOf("jio")>-1 || s.indexOf("reliance")>-1) return "Jio";
+        if(s.indexOf("airtel")>-1 || s.indexOf("bharti")>-1) return "Airtel";
+        if(s.indexOf("vodafone")>-1 || s.indexOf("idea")>-1 || s.indexOf(" vi ")>-1) return "Vi";
+        if(s.indexOf("bsnl")>-1 || s.indexOf("bharat sanchar")>-1) return "BSNL";
+        if(s.indexOf("mtnl")>-1) return "MTNL";
+        return "";
+      }
+      function markDetectedCarrier(name){
+        document.querySelectorAll("#carrierList .carrier-row").forEach(function(row){
+          var isPrimary = row.getAttribute("data-carrier")==="Jio";
+          var isDetected = name && row.getAttribute("data-carrier")===name;
+          var tag = row.querySelector(".carrier-tag");
+          row.classList.toggle("primary", isPrimary);
+          if(isDetected && isPrimary){ tag.textContent="Primary · Detected"; tag.className="carrier-tag detected"; }
+          else if(isDetected){ tag.textContent="Detected"; tag.className="carrier-tag detected"; }
+          else if(isPrimary){ tag.textContent="Primary"; tag.className="carrier-tag primary"; }
+          else { tag.textContent="Carrier"; tag.className="carrier-tag"; }
+        });
+      }
+      function detectIP(){
+        var btn=$("netDetectBtn"), bar=$("netProg"), stage=$("netStage");
+        btn.disabled=true; bar.style.width="35%"; stage.textContent="Querying ipwho.is for this connection…";
+        $("netIp").textContent="Detecting…";
+        fetch("https://ipwho.is/")
+          .then(function(r){ return r.json(); })
+          .then(function(d){
+            bar.style.width="100%";
+            if(!d || d.success===false || !d.ip){ throw new Error((d && d.message) || "Lookup failed"); }
+            netData=d;
+            var conn=d.connection||{};
+            var isp=conn.isp||conn.org||"—";
+            var org=conn.org||isp||"—";
+            var asn=conn.asn!=null ? ("AS"+conn.asn) : "—";
+            var city=d.city||"—", region=d.region||"—", country=d.country||"—";
+            $("netIp").textContent=d.ip;
+            $("netIpType").textContent="Public IP address ("+(d.type||"IPv4")+") of the current visitor";
+            $("netCity").textContent=city;
+            $("netRegion").textContent=region;
+            $("netCountry").textContent=country + (d.country_code? " ("+d.country_code+")":"");
+            $("netLocation").textContent=[city,region,country].filter(function(v){return v && v!=="—";}).join(", ")||"—";
+            $("netISP").textContent=isp;
+            $("netOrg").textContent=org;
+            $("netASN").textContent=asn + (conn.domain? " · "+conn.domain : "");
+            $("netCoords").textContent=(d.latitude!=null && d.longitude!=null)? (Number(d.latitude).toFixed(4)+", "+Number(d.longitude).toFixed(4)) : "—";
+            var tz=d.timezone||{}; $("netTz").textContent=tz.id||tz.utc||"—";
+            var carrier=carrierFromISP(isp+" "+org);
+            $("netCarrier").textContent=carrier? (carrier==="Jio"?"Reliance Jio": carrier==="Airtel"?"Airtel": carrier==="Vi"?"Vi (Vodafone Idea)": carrier) : (isp!=="—"? isp : "—");
+            $("netConnType").textContent=carrier? "Mobile / broadband via "+carrier : "Broadband / network via ISP above";
+            markDetectedCarrier(carrier);
+            stage.textContent="Complete. Live result from ipwho.is for this connection.";
+            log("IP lookup — "+d.ip+" · "+$("netLocation").textContent+" · "+isp, true);
+          })
+          .catch(function(err){
+            bar.style.width="0";
+            $("netIp").textContent="Could not detect";
+            stage.textContent="ipwho.is did not return a result ("+(err && err.message? err.message:"network error")+"). Check the connection and tap Detect my IP to retry.";
+            log("IP lookup failed — retry available");
+          })
+          .finally(function(){ btn.disabled=false; setTimeout(function(){ bar.style.width="0"; },600); });
+      }
+      $("netDetectBtn").addEventListener("click", detectIP);
+      $("netCopyBtn").addEventListener("click", function(){
+        if(!netData){ toast("No IP details yet — run Detect my IP first."); return; }
+        var txt="IP: "+$("netIp").textContent+"\nLocation: "+$("netLocation").textContent+"\nCity: "+$("netCity").textContent+"\nRegion: "+$("netRegion").textContent+"\nCountry: "+$("netCountry").textContent+"\nISP: "+$("netISP").textContent+"\nASN: "+$("netASN").textContent+"\nCarrier: "+$("netCarrier").textContent;
+        if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(txt).then(function(){ toast("IP details copied."); }, function(){ toast("Copy not available in this browser."); }); }
+        else toast("Copy not available in this browser.");
+      });
+
+      /* Phone series lookup — original allotment by opening digits, Jio weighted first */
+      var ASSAM_SERIES=["7002","7086","7099","763","8011","8638","881","882","9085","9435","9436","9706","9707","9854","9862","9864","9954","9957","7896","8473","8474"];
+      function carrierBySeries(num){
+        var p3=parseInt(num.slice(0,3),10), p4=num.slice(0,4);
+        /* Well-known older series overrides */
+        var over={"9435":"Vi","9436":"Vi","9706":"Airtel","9707":"Airtel","9862":"Airtel","9864":"Airtel","9954":"Airtel","9957":"Airtel","9854":"Airtel","7002":"Jio","7086":"Jio","7099":"Jio","8638":"Vi","9085":"Airtel","8011":"Airtel"};
+        if(over[p4]) return over[p4];
+        if(p3>=600 && p3<=739) return "Jio";          /* largest block — Jio series 6xx & 70x-73x */
+        if(p3>=740 && p3<=769) return "Airtel";
+        if(p3>=770 && p3<=799) return "Vi";
+        if(p3>=800 && p3<=849) return "Airtel";
+        if(p3>=850 && p3<=879) return "Vi";
+        if(p3>=880 && p3<=919) return "Airtel";
+        if(p3>=920 && p3<=949) return "Vi";
+        if(p3>=950 && p3<=979) return "Airtel";
+        return "Airtel"; /* 980-999 */
+      }
+      var OPERATOR_NAME={Jio:"Reliance Jio Infocomm Ltd", Airtel:"Bharti Airtel Ltd", Vi:"Vodafone Idea Ltd (Vi)"};
+      function lookupPhone(){
+        var raw=($("phoneInput").value||"").replace(/[\s\-()]/g,"");
+        if(raw.indexOf("+91")===0) raw=raw.slice(3);
+        else if(raw.length===12 && raw.indexOf("91")===0) raw=raw.slice(2);
+        else if(raw.length===11 && raw.charAt(0)==="0") raw=raw.slice(1);
+        var err=$("phoneError"), res=$("phoneResult");
+        function fail(msg){ err.textContent=msg; err.hidden=false; res.hidden=true; }
+        if(!/^\d+$/.test(raw)){ fail("Enter digits only — a 10-digit Indian mobile number."); return; }
+        if(raw.length!==10){ fail("That is "+raw.length+" digits. An Indian mobile number is exactly 10 digits."); return; }
+        if(!/^[6-9]/.test(raw)){ fail("Indian mobile numbers start with 6, 7, 8 or 9."); return; }
+        err.hidden=true;
+        var carrier=carrierBySeries(raw);
+        var series4=raw.slice(0,4), series3=raw.slice(0,3);
+        var isAssam=ASSAM_SERIES.some(function(s){ return raw.indexOf(s)===0; });
+        $("phNumber").textContent="+91 "+raw.slice(0,5)+" "+raw.slice(5);
+        $("phSeries").textContent=series4+" · opening block "+series3+"xx";
+        $("phCarrier").textContent=carrier==="Jio"?"Jio":carrier;
+        $("phOperator").textContent=OPERATOR_NAME[carrier]||carrier;
+        $("phCircle").textContent=isAssam?"Assam":"India (series allotment)";
+        $("phVerdict").innerHTML='<span class="verdict '+(carrier==="Jio"?"match":"probable")+'">'+carrier+' — by number series '+series4+'</span>';
+        /* highlight the matching carrier row in the list above */
+        markDetectedCarrier(carrier);
+        $("netCarrier").textContent=$("netCarrier").textContent; /* keep IP carrier text as-is */
+        res.hidden=false;
+        log("Phone lookup — series "+series4+" → "+carrier+(isAssam?" · Assam circle":""), true);
+        toast("Series "+series4+" → "+carrier);
+      }
+      $("phoneLookupBtn").addEventListener("click", lookupPhone);
+      $("phoneInput").addEventListener("keydown", function(e){ if(e.key==="Enter"){ e.preventDefault(); lookupPhone(); } });
+      $("phoneInput").addEventListener("input", function(){ this.value=this.value.replace(/[^\d+\s]/g,""); });
+
       /* ================= OVERVIEW ACTIONS ================= */
       $("runAllBtn").addEventListener("click", function(){
         var pending=ORDER.filter(function(m){ return !done[m]; });
@@ -1342,6 +1652,7 @@
       drawSpec("q"); drawWave(-1); drawFace(); drawFaceEmb();
       drawSpatter(); selectStain(2); updateFootMetrics();
       refreshOverview();
+      detectIP();
     })();
     </script>
   </body>
